@@ -55,7 +55,7 @@ float pid(float ref,float sensor){
   u=Kp*e+Ki*eint+Kd*edot;
   eprev=e;
   if (u>1.0)u=1.0;
-  if (u<-1.0)u=-1.0
+  if (u<-1.0)u=-1.0;
   return u;
 }
 

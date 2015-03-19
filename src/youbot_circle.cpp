@@ -10,6 +10,8 @@
 
 volatile float Ki,Kp,Kd;
 volatile float ref_distance;
+volatile float eint=0;
+volatile float eprev=0;
 
 ros::Publisher pub;
 
@@ -39,6 +41,20 @@ int minimum_vector(std::vector<float> a){  //function to calculate the minimum o
     }
   std::cout<<a[index]<<" is the minimum range\n"<<std::endl;
   return index;
+}
+
+float pid(float ref,float sensor){
+  float e,u;
+  float edot;
+  float EINTMAX=1.0;
+  e=ref-sensor;
+  edot=e-eprev;
+  eint=eint+e;
+  if (eint > EINTMAX) eint = EINTMAX;
+  if (eint < -EINTMAX) eint = -EINTMAX;
+  u=Kp*e+Ki*eint+Kd*edot;
+  eprev=e;
+  return u;
 }
 
 

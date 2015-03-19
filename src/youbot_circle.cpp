@@ -54,6 +54,8 @@ float pid(float ref,float sensor){
   if (eint < -EINTMAX) eint = -EINTMAX;
   u=Kp*e+Ki*eint+Kd*edot;
   eprev=e;
+  if (u>1.0)u=1.0;
+  if (u<-1.0)u=-1.0
   return u;
 }
 
@@ -67,7 +69,6 @@ void distance_controller(float current_distance)
 
 void processLaserScan(const sensor_msgs::LaserScan::ConstPtr& scan){
      //scan->ranges[] are laser readings
-  std::cout<<scan->ranges.size()<<" type of range values\n"<<std::endl;
   int index = minimum_vector(scan->ranges);
   distance_controller(scan->ranges[index]);  
 }

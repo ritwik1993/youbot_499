@@ -21,7 +21,8 @@ geometry_msgs::Twist command;
 
 void callback1(youbot_499::youbot_circle_pidConfig &config, uint32_t level)
 {
-  ROS_INFO("Dynamically reconfigure : \nDistance to object = %f\nDistance Kp = %f Distance Ki= %f Distance Kd = %f\nOrientation Kp = %f Orientation Ki = %f Orientation Kd = %f",
+  ROS_INFO("Dynamically reconfigure : \nLinear Y velocity = %f Distance to object = %f\nDistance Kp = %f Distance Ki= %f Distance Kd = %f\nOrientation Kp = %f Orientation Ki = %f Orientation Kd = %f",
+	   config.y,
            config.refd,
            config.kp,
            config.ki,
@@ -29,6 +30,7 @@ void callback1(youbot_499::youbot_circle_pidConfig &config, uint32_t level)
 	   config.kpp,
            config.kii,
 	   config.kdd);
+  command.linear.y=config.y;
   ref_distance = config.refd;
   Kp=config.kp;
   Ki=config.ki;
@@ -105,7 +107,7 @@ float angle_from_index(int index,float min,float max,float inc){
 void controller(float current_distance,float angle){
   distance_controller(current_distance);
   orientation_controller(angle);
-  command.linear.y=0.25;
+  //command.linear.y=0.25;
   pub.publish(command);
 }
 

@@ -15,13 +15,15 @@ volatile float eint=0;
 volatile float eprev=0;
 volatile float e1int=0;
 volatile float e1prev=0;
+volatile float estop=1;
 
 ros::Publisher pub;
 geometry_msgs::Twist command;
 
 void callback1(youbot_499::youbot_circle_pidConfig &config, uint32_t level)
 {
-  ROS_INFO("Dynamically reconfigure : \nLinear Y velocity = %f Distance to object = %f\nDistance Kp = %f Distance Ki= %f Distance Kd = %f\nOrientation Kp = %f Orientation Ki = %f Orientation Kd = %f",
+  ROS_INFO("Dynamically reconfigure : \Emergency Stop : %i\nLinear Y velocity = %f Distance to object = %f\nDistance Kp = %f Distance Ki= %f Distance Kd = %f\nOrientation Kp = %f Orientation Ki = %f Orientation Kd = %f",
+	   (int)estop,
 	   config.y,
            config.refd,
            config.kp,
@@ -105,9 +107,20 @@ float angle_from_index(int index,float min,float max,float inc){
 }
 
 void controller(float current_distance,float angle){
-  distance_controller(current_distance);
-  orientation_controller(angle);
-  //command.linear.y=0.25;
+  if (estop == 1)
+    {
+      command.linear.x=0;
+      command.linear.y=0;
+      command.linear.z=0;
+      command.angular.x=0;
+      command.angular.y=0;
+      command.angular.z=0;
+    }
+  else
+    {
+      distance_controller(current_distance);
+      orientation_controller(angle);
+    }
   pub.publish(command);
 }
 

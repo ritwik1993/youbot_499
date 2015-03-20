@@ -1,6 +1,4 @@
 //NODE to MOVE YOUBOT AROUND AN OBJECT using PID.
-//to do: Kp,Ki,Kd dynamic reconfigure
-//to do: Distance from object - dynamic reconfigure
 #include <iostream>
 #include "ros/ros.h"
 #include "geometry_msgs/Twist.h"

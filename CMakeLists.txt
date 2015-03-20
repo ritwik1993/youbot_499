@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  tf_conversions
 )
 
 ## System dependencies are found with CMake's conventions
@@ -179,4 +180,9 @@ add_dependencies(youbot_circle ${youbot_499}_gencfg)
 add_executable(lscan_angle_filter src/lscan_angle_filter.cpp)
 target_link_libraries(lscan_angle_filter ${catkin_LIBRARIES})
 add_dependencies(lscan_angle_filter ${youbot_499}_gencfg)
+
+add_executable(cropbox_dynamic src/cropbox_dynamic.cpp)
+target_link_libraries(cropbox_dynamic ${catkin_LIBRARIES})
+add_dependencies(cropbox_dynamic ${youbot_499}_gencfg)
+
 

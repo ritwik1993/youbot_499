@@ -23,7 +23,7 @@ geometry_msgs::Twist command;
 void callback1(youbot_499::youbot_circle_pidConfig &config, uint32_t level)
 {
   ROS_INFO("Dynamically reconfigure : \Emergency Stop : %i\nLinear Y velocity = %f Distance to object = %f\nDistance Kp = %f Distance Ki= %f Distance Kd = %f\nOrientation Kp = %f Orientation Ki = %f Orientation Kd = %f",
-	   (int)estop,
+	   (int)config.estop,
 	   config.y,
            config.refd,
            config.kp,
@@ -32,6 +32,7 @@ void callback1(youbot_499::youbot_circle_pidConfig &config, uint32_t level)
 	   config.kpp,
            config.kii,
 	   config.kdd);
+  estop=config.estop;
   command.linear.y=config.y;
   ref_distance = config.refd;
   Kp=config.kp;

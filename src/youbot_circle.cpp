@@ -63,8 +63,8 @@ float pid_distance(float ref,float sensor){
   if (eint < -EINTMAX) eint = -EINTMAX;
   u=Kp*e+Ki*eint+Kd*edot;
   eprev=e;
-  if (u>1.0)u=1.0;
-  if (u<-1.0)u=-1.0;
+  if (u>0.5)u=0.5;
+  if (u<-0.5)u=-0.5;  //saturate control
   return u;
 }
 
@@ -79,8 +79,8 @@ float pid_orientation(float ref,float sensor){
   if (e1int < -EINTMAX) e1int = -EINTMAX;
   u=Kpp*e+Kii*e1int+Kdd*edot;
   e1prev=e;
-  if (u>1.0)u=1.0;
-  if (u<-1.0)u=-1.0;
+  if (u>0.5)u=0.5;
+  if (u<-0.5)u=-0.5; //saturate control
   return u;
 }
 
@@ -105,6 +105,7 @@ float angle_from_index(int index,float min,float max,float inc){
 void controller(float current_distance,float angle){
   distance_controller(current_distance);
   orientation_controller(angle);
+  command.linear.y=0.25;
   pub.publish(command);
 }
 

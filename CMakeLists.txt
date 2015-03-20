@@ -83,7 +83,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 
-generate_dynamic_reconfigure_options(cfg/cmd_veldynamic.cfg cfg/youbot_circle_pid.cfg)
+generate_dynamic_reconfigure_options(cfg/cmd_veldynamic.cfg cfg/youbot_circle_pid.cfg cfg/lscan_angle_filter.cfg)
 
 catkin_package(
 #  INCLUDE_DIRS include
@@ -175,4 +175,8 @@ add_dependencies(youbot_vel_dynamic ${youbot_499}_gencfg)
 add_executable(youbot_circle src/youbot_circle.cpp)
 target_link_libraries(youbot_circle ${catkin_LIBRARIES})
 add_dependencies(youbot_circle ${youbot_499}_gencfg)
+
+add_executable(lscan_angle_filter src/lscan_angle_filter.cpp)
+target_link_libraries(lscan_angle_filter ${catkin_LIBRARIES})
+add_dependencies(lscan_angle_filter ${youbot_499}_gencfg)
 

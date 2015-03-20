@@ -14,6 +14,7 @@ volatile float eint=0;
 volatile float eprev=0;
 
 ros::Publisher pub;
+geometry_msgs::Twist command;
 
 void callback1(youbot_499::youbot_circle_pidConfig &config, uint32_t level)
 {
@@ -43,7 +44,23 @@ int minimum_vector(std::vector<float> a){  //function to calculate the minimum o
   return index;
 }
 
-float pid(float ref,float sensor){
+float pid_distance(float ref,float sensor){
+  float e,u;
+  float edot;
+  float EINTMAX=1.0;
+  e=ref-sensor;
+  edot=e-eprev;
+  eint=eint+e;
+  if (eint > EINTMAX) eint = EINTMAX;
+  if (eint < -EINTMAX) eint = -EINTMAX;
+  u=Kp*e+Ki*eint+Kd*edot;
+  eprev=e;
+  if (u>1.0)u=1.0;
+  if (u<-1.0)u=-1.0;
+  return u;
+}
+
+float pid_orientation(float ref,float sensor){
   float e,u;
   float edot;
   float EINTMAX=1.0;
@@ -62,15 +79,31 @@ float pid(float ref,float sensor){
 
 void distance_controller(float current_distance)
 {
-  geometry_msgs::Twist command;
-  command.linear.x=pid(ref_distance,current_distance);
+  command.linear.x=pid_distance(ref_distance,current_distance);
+}
+
+void orientation_controller(float angle)
+{
+  //command.angular.z=pid_orientation(0,angle);
+  std::cout<<angle<<" is the current angle\n"<<std::endl;
+}
+
+float angle_from_index(int index,float min,float max,float inc){
+  float angle =  inc*index + min;
+  return angle;
+}
+
+void controller(float current_distance,float angle){
+  distance_controller(current_distance);
+  orientation_controller(angle);
   pub.publish(command);
 }
 
 void processLaserScan(const sensor_msgs::LaserScan::ConstPtr& scan){
      //scan->ranges[] are laser readings
   int index = minimum_vector(scan->ranges);
-  distance_controller(scan->ranges[index]);  
+  float angle=angle_from_index(index,scan->angle_min,scan->angle_max,scan->angle_increment);
+  controller(scan->ranges[index],angle);  
 }
 
 int main(int argc, char **argv)

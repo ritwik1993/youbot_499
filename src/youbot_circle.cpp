@@ -8,25 +8,34 @@
 #include <dynamic_reconfigure/server.h>
 #include <youbot_499/youbot_circle_pidConfig.h>
 
-volatile float Ki,Kp,Kd;
+volatile float Ki,Kp,Kd; //Distance PID Gains
+volatile float Kii,Kpp,Kdd; //Orientation PID gains
 volatile float ref_distance;
 volatile float eint=0;
 volatile float eprev=0;
+volatile float e1int=0;
+volatile float e1prev=0;
 
 ros::Publisher pub;
 geometry_msgs::Twist command;
 
 void callback1(youbot_499::youbot_circle_pidConfig &config, uint32_t level)
 {
-  ROS_INFO("Dynamically reconfigure : \nDistance to object = %f Kp = %f Ki= %f Kd = %f",
+  ROS_INFO("Dynamically reconfigure : \nDistance to object = %f\nDistance Kp = %f Distance Ki= %f Distance Kd = %f\nOrientation Kp = %f Orientation Ki = %f Orientation Kd = %f",
            config.refd,
            config.kp,
            config.ki,
-	   config.kd);
+	   config.kd,
+	   config.kpp,
+           config.kii,
+	   config.kdd);
   ref_distance = config.refd;
   Kp=config.kp;
   Ki=config.ki;
   Kd=config.kd;
+  Kpp=config.kpp;
+  Kii=config.kii;
+  Kdd=config.kdd;
 }
 
 int minimum_vector(std::vector<float> a){  //function to calculate the minimum of a vector
@@ -40,7 +49,6 @@ int minimum_vector(std::vector<float> a){  //function to calculate the minimum o
 	  index=i;
 	}
     }
-  std::cout<<a[index]<<" is the minimum range\n"<<std::endl;
   return index;
 }
 
@@ -65,12 +73,12 @@ float pid_orientation(float ref,float sensor){
   float edot;
   float EINTMAX=1.0;
   e=ref-sensor;
-  edot=e-eprev;
-  eint=eint+e;
-  if (eint > EINTMAX) eint = EINTMAX;
-  if (eint < -EINTMAX) eint = -EINTMAX;
-  u=Kp*e+Ki*eint+Kd*edot;
-  eprev=e;
+  edot=e-e1prev;
+  e1int=e1int+e;
+  if (e1int > EINTMAX) e1int = EINTMAX;
+  if (e1int < -EINTMAX) e1int = -EINTMAX;
+  u=Kpp*e+Kii*e1int+Kdd*edot;
+  e1prev=e;
   if (u>1.0)u=1.0;
   if (u<-1.0)u=-1.0;
   return u;
@@ -80,11 +88,12 @@ float pid_orientation(float ref,float sensor){
 void distance_controller(float current_distance)
 {
   command.linear.x=pid_distance(ref_distance,current_distance);
+  std::cout<<current_distance<<" is the current distance\n"<<std::endl;
 }
 
 void orientation_controller(float angle)
 {
-  //command.angular.z=pid_orientation(0,angle);
+  command.angular.z=pid_orientation(0,angle);
   std::cout<<angle<<" is the current angle\n"<<std::endl;
 }
 

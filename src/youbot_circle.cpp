@@ -18,6 +18,8 @@ volatile float estop=1;
 ros::Publisher pub;
 geometry_msgs::Twist command;
 
+double seedCameraPose[] = { 2.940, 0.887, -1.8705, 3.2524, 2.9393 };
+
 void callback1(youbot_499::youbot_circle_pidConfig &config, uint32_t level)
 {
   ROS_INFO("Dynamically reconfigure : \nEmergency Stop : %i\nLinear Y velocity = %f Distance to object = %f\nDistance Kp = %f Distance Ki= %f Distance Kd = %f\nOrientation Kp = %f Orientation Ki = %f Orientation Kd = %f",
@@ -130,12 +132,18 @@ void processLaserScan(const sensor_msgs::LaserScan::ConstPtr& scan){
   controller(scan->ranges[index],angle);  
 }
 
+void arm_initialize()
+{
+  // to add code to move to seedCameraPose[]
+}
+
+
 int main(int argc, char **argv)
 {
   ros::init(argc, argv, "youbot_circle");
-  ros::NodeHandle n;
-  
+  ros::NodeHandle n;  
   pub = n.advertise<geometry_msgs::Twist> ("cmd_vel", 1);
+  arm_initialize();
   ros::Subscriber scanSub=n.subscribe<sensor_msgs::LaserScan>("base_scan",10,&processLaserScan);
   dynamic_reconfigure::Server<youbot_499::youbot_circle_pidConfig> pr_srv;
   dynamic_reconfigure::Server<youbot_499::youbot_circle_pidConfig>::CallbackType cb1;

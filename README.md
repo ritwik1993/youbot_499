@@ -17,6 +17,12 @@ This pops up a rqt_reconfigure window. Set values for commanded distance from ob
 * kp (position) = -2.0
 * kpp (orientation) = -2.0
 
+There is also pointless application that lets you move the youbot around using rqt_reconfigure. To launch it on Gazebo, simple run
+
+`roslaunch youbot_499 youbot_gazebo_move`
+
+This again pops up a rqt_reconfigure window which lets you control the velocity of the youbot.
+
 Project Goals
 ------------------------
 1. Test different RGB-D sensors

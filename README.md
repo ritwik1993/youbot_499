@@ -17,6 +17,13 @@ This pops up a rqt_reconfigure window. Choose youbot_circle and Set values for c
 * kp (position) = -2.0
 * kpp (orientation) = -2.0
 
+Another useful node is lscan_angle_filter. Like mentioned above, it lets you dynamically filter the laser scanner output. To use it on Gazebo, simply run
+`roslaunch youbot_499 youbot_gazebo_angle_filter.launch`
+
+This pops up Rviz and also a rqt_reconfigure window which lets you choose the angle of view. You can see the scan changing on Rviz as you move the sliders on rqt_reconfigure.
+
+
+
 There is also pointless application that lets you move the youbot around using rqt_reconfigure. To launch it on Gazebo, simple run
 
 `roslaunch youbot_499 youbot_gazebo_move.launch`

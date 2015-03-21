@@ -7,9 +7,15 @@ Otherwise, every other dependency is usually available on a standard ROS Install
 
 Launch File 
 ------------------------
-To launch the demo application on Gazebo
+To launch the demo application of the youbot moving around an object on Gazebo, simply run
 
 `roslaunch youbot_499 youbot_gazebo_circle`
+
+This pops up a rqt_reconfigure window. Set values for commanded distance from object and PID gains for both position and orientation controller. Set a linear Y velocity and uncheck the emergency stop (estop). Sample values are :
+* refd = 1.0
+* linear_y = 0.05 / 0.1
+* kp (position) = -2.0
+* kpp (orientation) = -2.0
 
 Project Goals
 ------------------------

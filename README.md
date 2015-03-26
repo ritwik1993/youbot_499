@@ -14,7 +14,7 @@ This is the real essence of this repository. There are currently the following n
 
 2. `youbot_circle` which lets you move in a circle around an object. The controller gain's, distance to object and emergecy stop are all dynamically reconfigurable parameters. See section on Launch files below, for demo.
 
-3. 'lscan_angle_filter' this node lets you dynamically filter the laser scanner output by setting ranges of hits, beyond the required angle of view, very HIGH. See section on Launch files below, for demo.
+3. `lscan_angle_filter` this node lets you dynamically filter the laser scanner output by setting ranges of hits, beyond the required angle of view, very HIGH. See section on Launch files below, for demo.
 
 4. `cropbox_dynamic` reads the current distance to the object (which, due to our controller is the same as the commanded distance), reads the current tf tree and outputs an estimate of the position of the object in the ASUS's frame.
 

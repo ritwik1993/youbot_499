@@ -14,7 +14,7 @@ This is the real essence of this repository. There are currently the following n
 
 2. `youbot_circle` which lets you move in a circle around an object. The controller gain's, distance to object and emergecy stop are all dynamically reconfigurable parameters. See section on Launch files below, for demo.
 
-3. 'lscan_angle_filter' this node lets you dynamically filter the laser scanner output by setting ranges of hits, beyond the required angle of view, very HIGH. See section on Launch files below, for demo.
+3. `lscan_angle_filter` this node lets you dynamically filter the laser scanner output by setting ranges of hits, beyond the required angle of view, very HIGH. See section on Launch files below, for demo.
 
 4. `cropbox_dynamic` reads the current distance to the object (which, due to our controller is the same as the commanded distance), reads the current tf tree and outputs an estimate of the position of the object in the ASUS's frame.
 
@@ -30,7 +30,7 @@ To launch the demo application of the youbot moving around an object on Gazebo, 
 
 This pops up a rqt_reconfigure window. Choose youbot_circle and Set values for commanded distance from object and PID gains for both position and orientation controller. Set a linear Y velocity and uncheck the emergency stop (estop). Sample values are :
 * refd = 1.0
-* linear_y = 0.05 / 0.1
+* linear_y = 0.05 or 0.1
 * kp (position) = -2.0
 * kpp (orientation) = -2.0
 

@@ -8,6 +8,9 @@ find_package(catkin REQUIRED COMPONENTS
   dynamic_reconfigure
   geometry_msgs
   sensor_msgs
+  pluginlib
+  moveit_core
+  urdf
   roscpp
   rospy
   std_msgs
@@ -87,7 +90,7 @@ find_package(catkin REQUIRED COMPONENTS
 generate_dynamic_reconfigure_options(cfg/cmd_veldynamic.cfg cfg/youbot_circle_pid.cfg cfg/lscan_angle_filter.cfg)
 
 catkin_package(
-#  INCLUDE_DIRS include
+INCLUDE_DIRS include
 #  LIBRARIES youbot_499
 #  CATKIN_DEPENDS dynamic_reconfigure geometry_msgs roscpp rospy std_msgs
 #  DEPENDS system_lib
@@ -102,6 +105,7 @@ catkin_package(
 # include_directories(include)
 include_directories(
   ${catkin_INCLUDE_DIRS}
+include
 )
 
 ## Declare a cpp library
@@ -173,7 +177,9 @@ add_executable(youbot_vel_dynamic src/youbot_vel_dynamic.cpp)
 target_link_libraries(youbot_vel_dynamic ${catkin_LIBRARIES})
 add_dependencies(youbot_vel_dynamic ${youbot_499}_gencfg)
 
-add_executable(youbot_circle src/youbot_circle.cpp)
+add_executable(youbot_circle src/youbot_circle.cpp
+  src/arm_interface.cpp
+  src/arm_interface_youbot.cpp)
 target_link_libraries(youbot_circle ${catkin_LIBRARIES})
 add_dependencies(youbot_circle ${youbot_499}_gencfg)
 

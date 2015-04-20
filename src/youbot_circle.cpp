@@ -6,6 +6,10 @@
 #include <dynamic_reconfigure/server.h>
 #include <youbot_499/youbot_circle_pidConfig.h>
 
+#include "youbot_499/arm_interface_youbot.h"
+
+
+
 volatile float Ki,Kp,Kd; //Distance PID Gains
 volatile float Kii,Kpp,Kdd; //Orientation PID gains
 volatile float ref_distance;
@@ -17,8 +21,10 @@ volatile float estop=1;
 
 ros::Publisher pub;
 geometry_msgs::Twist command;
+cArmInterface* pArmInterface;
 
-double seedCameraPose[] = { 2.940, 0.887, -1.8705, 3.2524, 2.9393 };
+
+double seedCameraPose[] = { 2.92516, 0.790292, -1.92035, 3.429, 2.9393 };
 
 void callback1(youbot_499::youbot_circle_pidConfig &config, uint32_t level)
 {
@@ -134,7 +140,10 @@ void processLaserScan(const sensor_msgs::LaserScan::ConstPtr& scan){
 
 void arm_initialize()
 {
-  // to add code to move to seedCameraPose[]
+  // to add code to move to seedCameraPose[]       
+	std::cout << "Driving arm to camera position." << std::endl;
+	pArmInterface->GoToCameraSearchPose();
+	ros::Duration(3).sleep();  // Wait for the arm to get to the position.
 }
 
 

@@ -167,7 +167,7 @@ int main(int argc, char **argv)
   	ros::Duration(5).sleep();
 
   	tf::StampedTransform g_arm0_to_base_link;
-  	pListener->lookupTransform("arm_link_0", "base_link", ros::Time(0), g_arm0_to_base_link);
+  	pListener->lookupTransform("/arm_link_0", "/base_link", ros::Time(0), g_arm0_to_base_link);
 
 
   	std::cout << "Creating arm interface." << std::endl;

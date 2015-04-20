@@ -160,22 +160,22 @@ int main(int argc, char **argv)
   pub = n.advertise<geometry_msgs::Twist> ("cmd_vel", 1);
 
 
- // --- TF --- //
+ 
 	
-	tf::TransformListener* pListener = new tf::TransformListener();
-	std::cout << "Wait for 5 seconds to allow tfs to buffer" << std::endl;
-	ros::Duration(5).sleep();
+  // 	tf::TransformListener* pListener = new tf::TransformListener();
+  // 	std::cout << "Wait for 5 seconds to allow tfs to buffer" << std::endl;
+  // 	ros::Duration(5).sleep();
 
-	tf::StampedTransform g_arm0_to_base_link;
-	pListener->lookupTransform("arm_link_0", "base_link", ros::Time(0), g_arm0_to_base_link);
+  // 	tf::StampedTransform g_arm0_to_base_link;
+  // 	pListener->lookupTransform("arm_link_0", "base_link", ros::Time(0), g_arm0_to_base_link);
 
 
-	std::cout << "Creating arm interface." << std::endl;
+  // 	std::cout << "Creating arm interface." << std::endl;
 
-        std::cout << "\tUsing youBot interface" << std::endl;
-	pArmInterface = new cArmInterfaceYoubot(g_arm0_to_base_link, n);
+  //       std::cout << "\tUsing youBot interface" << std::endl;
+  // 	pArmInterface = new cArmInterfaceYoubot(g_arm0_to_base_link, n);
 
-  arm_initialize();
+  // arm_initialize();
   ros::Subscriber scanSub=n.subscribe<sensor_msgs::LaserScan>("base_scan",10,&processLaserScan);
   dynamic_reconfigure::Server<youbot_499::youbot_circle_pidConfig> pr_srv;
   dynamic_reconfigure::Server<youbot_499::youbot_circle_pidConfig>::CallbackType cb1;

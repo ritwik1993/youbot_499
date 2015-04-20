@@ -160,7 +160,9 @@ int main(int argc, char **argv)
   ros::init(argc, argv, "youbot_circle");
   ros::NodeHandle n;  
   pub = n.advertise<geometry_msgs::Twist> ("cmd_vel", 1);
+  std::cout << "Sleeping for 10 seconds "<< std::endl;
   ros::Duration(10).sleep();
+  std::cout << "Woke up" << std::endl;
   armJointsPub = n.advertise<brics_actuator::JointPositions>("/arm_1/arm_controller/position_command", 1);
 
   // Set the arm to the camera pose and leave it there.
@@ -179,6 +181,7 @@ int main(int argc, char **argv)
       pos.positions.push_back(val);
     }
 
+  std::cout << "Publishing joint values" << std::endl;
   armJointsPub.publish(pos);
   
  

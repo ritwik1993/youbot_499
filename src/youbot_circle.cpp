@@ -3,6 +3,7 @@
 #include "ros/ros.h"
 #include "geometry_msgs/Twist.h"
 #include "sensor_msgs/LaserScan.h"
+#include <brics_actuator/JointPositions.h>
 #include <dynamic_reconfigure/server.h>
 #include <youbot_499/youbot_circle_pidConfig.h>
 #include <tf/LinearMath/Transform.h>
@@ -25,6 +26,7 @@ volatile float e1prev=0;
 volatile float estop=1;
 
 ros::Publisher pub;
+ros::Publisher armJointsPub;
 geometry_msgs::Twist command;
 cArmInterface* pArmInterface;
 
@@ -158,8 +160,26 @@ int main(int argc, char **argv)
   ros::init(argc, argv, "youbot_circle");
   ros::NodeHandle n;  
   pub = n.advertise<geometry_msgs::Twist> ("cmd_vel", 1);
+  armJointsPub = n.advertise<brics_actuator::JointPositions>("/arm_1/arm_controller/position_command", 1);
 
+  // Set the arm to the camera pose and leave it there.
+  brics_actuator::JointPositions pos;
+  
+  for( std::size_t i = 0; i < 5; ++i )
+    {
+      brics_actuator::JointValue val;
+		
+      std::ostringstream jointName;
+      jointName << "arm_joint_" << i+1;
+      val.joint_uri = jointName.str();
+      val.unit = "rad";
+      val.value = seedCameraPose[i];
 
+      pos.positions.push_back(val);
+    }
+
+  armJointsPub.publish(pos);
+  
  
 	
   // 	tf::TransformListener* pListener = new tf::TransformListener();

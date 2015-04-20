@@ -160,6 +160,7 @@ int main(int argc, char **argv)
   ros::init(argc, argv, "youbot_circle");
   ros::NodeHandle n;  
   pub = n.advertise<geometry_msgs::Twist> ("cmd_vel", 1);
+  ros::Duration(10).sleep();
   armJointsPub = n.advertise<brics_actuator::JointPositions>("/arm_1/arm_controller/position_command", 1);
 
   // Set the arm to the camera pose and leave it there.

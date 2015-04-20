@@ -1,0 +1,14 @@
+<launch>
+<arg name="youbot_xacro" default="$(find youbot_description)/robots/youbot.urdf.xacro"/>
+	<param name="robot_description" command="$(find xacro)/xacro.py '$(arg youbot_xacro)'"/>
+ <include file="$(find youbot_driver_ros_interface)/launch/youbot_driver.launch" />
+ <include file="$(find youbot_499)/launch/lscan_launch.launch" />
+  <node pkg="youbot_499" type="lscan_angle_filter" name="lscan_angle_filter">
+  <remap from="/base_scan" to="/scan" />
+  </node>
+  <node pkg="youbot_499" type="youbot_circle" name="youbot_circle">
+  <remap from="/base_scan" to="/filtered_scan" />
+  </node>
+ 
+
+</launch>

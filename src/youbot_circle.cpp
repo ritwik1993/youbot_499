@@ -163,8 +163,8 @@ int main(int argc, char **argv)
  // --- TF --- //
 	
 	tf::TransformListener* pListener = new tf::TransformListener();
-	std::cout << "Wait for 2 seconds to allow tfs to buffer" << std::endl;
-	ros::Duration(2).sleep();
+	std::cout << "Wait for 5 seconds to allow tfs to buffer" << std::endl;
+	ros::Duration(5).sleep();
 
 	tf::StampedTransform g_arm0_to_base_link;
 	pListener->lookupTransform("arm_link_0", "base_link", ros::Time(0), g_arm0_to_base_link);

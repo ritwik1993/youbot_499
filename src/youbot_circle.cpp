@@ -5,6 +5,11 @@
 #include "sensor_msgs/LaserScan.h"
 #include <dynamic_reconfigure/server.h>
 #include <youbot_499/youbot_circle_pidConfig.h>
+#include <tf/LinearMath/Transform.h>
+#include <tf/LinearMath/Quaternion.h>
+#include <tf/LinearMath/Vector3.h>
+#include <tf/LinearMath/Matrix3x3.h>
+#include <tf/transform_listener.h>
 
 #include "youbot_499/arm_interface_youbot.h"
 
@@ -140,7 +145,8 @@ void processLaserScan(const sensor_msgs::LaserScan::ConstPtr& scan){
 
 void arm_initialize()
 {
-  // to add code to move to seedCameraPose[]       
+   
+          
 	std::cout << "Driving arm to camera position." << std::endl;
 	pArmInterface->GoToCameraSearchPose();
 	ros::Duration(3).sleep();  // Wait for the arm to get to the position.
@@ -152,6 +158,23 @@ int main(int argc, char **argv)
   ros::init(argc, argv, "youbot_circle");
   ros::NodeHandle n;  
   pub = n.advertise<geometry_msgs::Twist> ("cmd_vel", 1);
+
+
+ // --- TF --- //
+	
+	tf::TransformListener* pListener = new tf::TransformListener();
+	std::cout << "Wait for 2 seconds to allow tfs to buffer" << std::endl;
+	ros::Duration(2).sleep();
+
+	tf::StampedTransform g_arm0_to_base_link;
+	pListener->lookupTransform("arm_link_0", "base_link", ros::Time(0), g_arm0_to_base_link);
+
+
+	std::cout << "Creating arm interface." << std::endl;
+
+        std::cout << "\tUsing youBot interface" << std::endl;
+	pArmInterface = new cArmInterfaceYoubot(g_arm0_to_base_link, n);
+
   arm_initialize();
   ros::Subscriber scanSub=n.subscribe<sensor_msgs::LaserScan>("base_scan",10,&processLaserScan);
   dynamic_reconfigure::Server<youbot_499::youbot_circle_pidConfig> pr_srv;
